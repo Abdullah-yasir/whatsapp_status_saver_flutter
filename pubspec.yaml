@@ -1,0 +1,32 @@
+name: whatsapps_status_saver
+description: This app lets you save the whatsapp status.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.18.5 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  permission_handler: ^10.2.0
+  path_provider: ^2.0.11
+  fluttertoast: ^8.1.2
+  photo_view: ^0.14.0
+  video_thumbnail: ^0.5.3
+  video_player: ^2.4.10
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/status-download.png
+
