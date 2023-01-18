@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:whatsapps_status_saver/flex-card.dart';
-import 'package:whatsapps_status_saver/helpers.dart';
-import 'package:whatsapps_status_saver/routes.dart';
-import 'package:whatsapps_status_saver/screen-args.dart';
+import 'package:whatsapps_status_saver/classes/helpers.dart';
+import 'package:whatsapps_status_saver/classes/routes.dart';
+import 'package:whatsapps_status_saver/classes/screen-args.dart';
+import 'package:whatsapps_status_saver/widgets/flex-card.dart';
 
 class HomeCards extends StatefulWidget {
   const HomeCards({Key? key}) : super(key: key);
@@ -30,7 +30,7 @@ class _HomeCardsState extends State<HomeCards> {
             child: Row(
               children: [
                 FlexCard(
-                  color: Colors.blue,
+                  color: Colors.green,
                   icon: Icons.download,
                   text: 'Save Status',
                   onTap: () {
@@ -43,7 +43,7 @@ class _HomeCardsState extends State<HomeCards> {
                   },
                 ),
                 FlexCard(
-                  color: Colors.blue,
+                  color: Colors.green,
                   icon: Icons.image,
                   text: 'Gallery',
                   onTap: () {
@@ -57,7 +57,7 @@ class _HomeCardsState extends State<HomeCards> {
             child: Row(
               children: [
                 FlexCard(
-                  color: Colors.blue,
+                  color: Colors.green,
                   icon: Icons.sticky_note_2,
                   text: 'Stickers',
                   onTap: () {
@@ -65,7 +65,7 @@ class _HomeCardsState extends State<HomeCards> {
                   },
                 ),
                 FlexCard(
-                  color: Colors.blue,
+                  color: Colors.green,
                   icon: Icons.format_quote_rounded,
                   text: 'Quotes',
                   onTap: () {
@@ -79,7 +79,7 @@ class _HomeCardsState extends State<HomeCards> {
             child: Row(
               children: [
                 FlexCard(
-                  color: Colors.blue,
+                  color: Colors.green,
                   icon: Icons.circle_outlined,
                   text: 'Write Status',
                   onTap: () {
@@ -87,7 +87,7 @@ class _HomeCardsState extends State<HomeCards> {
                   },
                 ),
                 FlexCard(
-                  color: Colors.blue,
+                  color: Colors.green,
                   icon: Icons.message,
                   text: 'Write Message',
                   onTap: () {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:whatsapps_status_saver/drawer.dart';
-import 'package:whatsapps_status_saver/home-cards.dart';
+import 'package:whatsapps_status_saver/sections/drawer.dart';
+import 'package:whatsapps_status_saver/sections/home-cards.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -15,7 +15,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue.shade50,
+      backgroundColor: Colors.green.shade50,
       appBar: AppBar(
         title: Text(widget.title),
         actions: [

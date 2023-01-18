@@ -21,6 +21,7 @@ class FlexCard extends StatelessWidget {
         onTap: onTap,
         child: Container(
           margin: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(15.0),
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(10.0),
@@ -28,10 +29,9 @@ class FlexCard extends StatelessWidget {
           ),
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  margin: const EdgeInsets.only(bottom: 50),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
                     color: Colors.white,
@@ -40,7 +40,7 @@ class FlexCard extends StatelessWidget {
                   width: 80,
                   child: Icon(
                     icon,
-                    color: Colors.blueAccent,
+                    color: Colors.green,
                   ),
                 ),
                 Text(

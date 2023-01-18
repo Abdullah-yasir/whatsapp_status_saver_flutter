@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:whatsapps_status_saver/routes.dart';
-import 'package:whatsapps_status_saver/screen-args.dart';
+import 'package:whatsapps_status_saver/classes/routes.dart';
+import 'package:whatsapps_status_saver/classes/screen-args.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
   const VideoPlayerScreen({Key? key}) : super(key: key);

@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:whatsapps_status_saver/helpers.dart';
-import 'package:whatsapps_status_saver/routes.dart';
-import 'package:whatsapps_status_saver/screen-args.dart';
+import 'package:whatsapps_status_saver/classes/helpers.dart';
+import 'package:whatsapps_status_saver/classes/routes.dart';
+import 'package:whatsapps_status_saver/classes/screen-args.dart';
 
 class SaveStatusScreen extends StatefulWidget {
   const SaveStatusScreen({super.key});
@@ -47,7 +47,7 @@ class _SaveStatusScreenState extends State<SaveStatusScreen> {
       child: const Center(
         child: Icon(
           Icons.play_circle_filled_rounded,
-          color: Colors.blue,
+          color: Colors.green,
         ),
       ),
     );

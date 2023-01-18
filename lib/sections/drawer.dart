@@ -9,7 +9,7 @@ class DrawerWidget extends StatefulWidget {
 
 class _DrawerWidgetState extends State<DrawerWidget> {
   bool _saveStatus = false;
-  final Color _iconColor = Colors.blue.shade500;
+  final Color _iconColor = Colors.green.shade500;
 
   void _toggleSaveStatus(value) {
     setState(() {
@@ -29,7 +29,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         children: [
           const DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Colors.green,
             ),
             child: Icon(
               Icons.whatsapp,
@@ -56,7 +56,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             trailing: Switch(
               // This bool value toggles the switch.
               value: _saveStatus,
-              activeColor: Colors.blue,
+              activeColor: Colors.green,
               onChanged: (bool value) {
                 _toggleSaveStatus(value);
               },

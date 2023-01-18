@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:whatsapps_status_saver/grid-bodered-image.dart';
-import 'package:whatsapps_status_saver/grid-image.dart';
-import 'package:whatsapps_status_saver/grid-view.dart';
-import 'package:whatsapps_status_saver/helpers.dart';
+import 'package:whatsapps_status_saver/classes/helpers.dart';
+import 'package:whatsapps_status_saver/widgets/grid-bodered-image.dart';
+import 'package:whatsapps_status_saver/widgets/grid-image.dart';
+import 'package:whatsapps_status_saver/widgets/grid-view.dart';
 
 class StickersScreen extends StatefulWidget {
   const StickersScreen({super.key});

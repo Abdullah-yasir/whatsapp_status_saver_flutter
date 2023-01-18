@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:whatsapps_status_saver/routes.dart';
-import 'package:whatsapps_status_saver/screen-args.dart';
+import 'package:whatsapps_status_saver/classes/routes.dart';
+import 'package:whatsapps_status_saver/classes/screen-args.dart';
 
 class GalleryView extends StatefulWidget {
   const GalleryView({super.key});
