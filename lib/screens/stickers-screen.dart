@@ -1,10 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:whatsapps_status_saver/classes/builder.dart';
+import 'package:whatsapps_status_saver/classes/constants.dart';
 import 'package:whatsapps_status_saver/classes/helpers.dart';
 import 'package:whatsapps_status_saver/widgets/grid-bodered-image.dart';
 import 'package:whatsapps_status_saver/widgets/grid-image.dart';
 import 'package:whatsapps_status_saver/widgets/grid-view.dart';
+import 'package:whatsapps_status_saver/widgets/placeholder.dart';
+import 'package:whatsapps_status_saver/widgets/spinner.dart';
 
 class StickersScreen extends StatefulWidget {
   const StickersScreen({super.key});
@@ -15,26 +19,51 @@ class StickersScreen extends StatefulWidget {
 
 class _StickersScreenState extends State<StickersScreen> {
   List<FileSystemEntity> stickers = [];
+  List<FileSystemEntity> savedStickers = [];
   List<Directory> appDirectories = [];
-  String stickersDir =
-      '/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Stickers';
 
-  Future<File> saveSticker(String path) async {
-    String savePath = [
-      appDirectories[0].parent.path,
-      Platform.pathSeparator,
-      'stickers'
-    ].join();
-    Directory savedStickers = await Helper.createDirectory(savePath);
-    return await Helper.copyFile(path, savedStickers.path);
+  String stickerPath = Constants.stickersFolder;
+
+  late String stickersSavePath;
+
+  bool loading = true;
+
+  void _saveSticker(String path) async {
+    await Helper.copyFile(path, stickersSavePath);
+    _hydrateState();
+  }
+
+  void _hydrateState() async {
+    stickers = await Helper.getFilesOfType(stickerPath, 'webp');
+    savedStickers = await Helper.getFilesOfType(stickersSavePath, 'webp');
+
+    XBuilder.showSnackBar("Status downloaded!", context);
+
+    loading = false;
+    setState(() {});
   }
 
   @override
   void initState() {
     (() async {
-      stickers = await Helper.getFilesOfType(stickersDir, 'webp');
       appDirectories = await Helper.getAppDirectories();
-      setState(() {});
+
+      String savePath = [
+        appDirectories[0].parent.path,
+        Platform.pathSeparator,
+        'stickers'
+      ].join();
+
+      Directory savedStickersDir = Directory(savePath);
+
+      // create dir for saving stickers if not exist
+      if (!(await savedStickersDir.exists())) {
+        await savedStickersDir.create();
+      }
+
+      stickersSavePath = savedStickersDir.path;
+
+      _hydrateState();
     })();
     super.initState();
   }
@@ -61,21 +90,31 @@ class _StickersScreenState extends State<StickersScreen> {
         ),
         body: TabBarView(
           children: [
-            GridViewCustom(
-              builder: (context, index) {
-                return GridBorderedImage(
-                  source: stickers[index].path,
-                  onTap: () {},
-                );
-              },
-              itemsCount: stickers.length,
-            ),
-            GridViewCustom(
-              builder: (context, index) {
-                return GridImage(source: stickers[index].path, onTap: () {});
-              },
-              itemsCount: stickers.length,
-            ),
+            loading
+                ? const Spinner()
+                : GridViewCustom(
+                    builder: (context, index) {
+                      return GridBorderedImage(
+                        source: stickers[index].path,
+                        onTap: () {
+                          _saveSticker(stickers[index].path);
+                        },
+                      );
+                    },
+                    itemsCount: stickers.length,
+                  ),
+            savedStickers.isEmpty
+                ? const XPlaceholder(
+                    text: "You have not yet saved any sticker!")
+                : GridViewCustom(
+                    builder: (context, index) {
+                      return GridImage(
+                        source: savedStickers[index].path,
+                        onTap: () {},
+                      );
+                    },
+                    itemsCount: savedStickers.length,
+                  ),
           ],
         ),
       ),

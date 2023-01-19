@@ -27,7 +27,15 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
       ),
-      body: const HomeCards(),
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+              fit: BoxFit.fill, image: AssetImage("assets/app-bg.webp")),
+        ),
+        child: const HomeCards(),
+      ),
       drawer: const DrawerWidget(),
     );
   }

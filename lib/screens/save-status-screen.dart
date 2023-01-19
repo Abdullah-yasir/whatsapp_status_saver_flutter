@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:whatsapps_status_saver/classes/builder.dart';
 import 'package:whatsapps_status_saver/classes/constants.dart';
 import 'package:whatsapps_status_saver/classes/file-formats.dart';
@@ -19,17 +18,17 @@ class SaveStatusScreen extends StatefulWidget {
 
 class _SaveStatusScreenState extends State<SaveStatusScreen> {
   int activeTab = 0;
+  bool loading = true;
+  String whatsappStatusDir = Constants.statusFolder;
+
+  late List<Directory> appDirectories;
+
   var photos = <String>[];
   var saved = <String>[];
-
   var statusVideos = <String>[];
   var statusVideosThumbs = <String>[];
 
   var savedVideoThumbMap = <String, String>{};
-
-  late List<Directory> appDirectories;
-
-  String whatsappStatusDir = Constants.statusFolder;
 
   void _downloadStatus(String filePath) async {
     // copying file to the save location
@@ -54,13 +53,7 @@ class _SaveStatusScreenState extends State<SaveStatusScreen> {
       saved = images;
     });
 
-    Fluttertoast.showToast(
-        msg: "Status downloaded successfully",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black45,
-        timeInSecForIosWeb: 1,
-        fontSize: 16.0);
+    XBuilder.showSnackBar("Status downloaded!", context);
   }
 
   Widget _buildSavedItem(String path) {
@@ -119,6 +112,7 @@ class _SaveStatusScreenState extends State<SaveStatusScreen> {
         savedVideoThumbMap[video] = await Helper.getVideoThumb(File(video));
       }
 
+      loading = false;
       setState(() {});
     })();
     super.initState();
@@ -150,7 +144,7 @@ class _SaveStatusScreenState extends State<SaveStatusScreen> {
           ),
         ),
         body: TabBarView(children: [
-          photos.isEmpty
+          loading
               ? const Spinner()
               : XBuilder.buildGrid(
                   builder: (context, index) {
@@ -161,7 +155,7 @@ class _SaveStatusScreenState extends State<SaveStatusScreen> {
                   },
                   itemsCount: photos.length,
                 ),
-          statusVideos.isEmpty
+          loading
               ? const Spinner()
               : XBuilder.buildGrid(
                   builder: (context, index) {
@@ -172,7 +166,7 @@ class _SaveStatusScreenState extends State<SaveStatusScreen> {
                   },
                   itemsCount: statusVideos.length,
                 ),
-          saved.isEmpty
+          loading
               ? const Spinner()
               : XBuilder.buildGrid(
                   builder: (context, index) {

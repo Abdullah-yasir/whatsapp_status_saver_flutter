@@ -45,4 +45,17 @@ class XBuilder {
       ),
     );
   }
+
+  static void showSnackBar(String message, context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(message),
+          ],
+        ),
+      ),
+    );
+  }
 }
