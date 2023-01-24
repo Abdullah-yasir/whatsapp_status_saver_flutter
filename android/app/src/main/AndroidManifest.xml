@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.whatsapps_status_saver">
+    package="com.anaar.whatsapps_status_saver">
    <application
-        android:label="Whats Status Saver"
+        android:label="Whats Status Saver and Creator"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 class XBuilder {
   static Widget buildGrid({builder, itemsCount}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,

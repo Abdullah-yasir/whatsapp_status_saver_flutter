@@ -32,7 +32,8 @@ class _HomeCardsState extends State<HomeCards> {
                 FlexCard(
                   color: Colors.green,
                   icon: Icons.download,
-                  text: 'Save Status',
+                  text: 'Save',
+                  description: 'Save the seen status images and videos',
                   onTap: () {
                     Navigator.pushNamed(
                       context,
@@ -46,6 +47,7 @@ class _HomeCardsState extends State<HomeCards> {
                   color: Colors.green,
                   icon: Icons.image,
                   text: 'Gallery',
+                  description: "Manage the WhatsApp media",
                   onTap: () {
                     Navigator.pushNamed(context, RoutesNames.gallery);
                   },
@@ -60,16 +62,18 @@ class _HomeCardsState extends State<HomeCards> {
                   color: Colors.green,
                   icon: Icons.sticky_note_2,
                   text: 'Stickers',
+                  description: "Save you favorite stickers",
                   onTap: () {
                     Navigator.pushNamed(context, RoutesNames.stickers);
                   },
                 ),
                 FlexCard(
                   color: Colors.green,
-                  icon: Icons.format_quote_rounded,
-                  text: 'Quotes',
+                  icon: Icons.video_file_rounded,
+                  text: 'Video',
+                  description: "Split video file for status",
                   onTap: () {
-                    Navigator.pushNamed(context, RoutesNames.quotes);
+                    Navigator.pushNamed(context, RoutesNames.splitVideo);
                   },
                 ),
               ],
@@ -81,7 +85,8 @@ class _HomeCardsState extends State<HomeCards> {
                 FlexCard(
                   color: Colors.green,
                   icon: Icons.circle_outlined,
-                  text: 'Write Status',
+                  text: 'Status',
+                  description: "Write status with formatting",
                   onTap: () {
                     Navigator.pushNamed(context, RoutesNames.writeStatus);
                   },
@@ -89,7 +94,8 @@ class _HomeCardsState extends State<HomeCards> {
                 FlexCard(
                   color: Colors.green,
                   icon: Icons.message,
-                  text: 'Write Message',
+                  text: 'Message',
+                  description: "Write message with formatting",
                   onTap: () {
                     Navigator.pushNamed(context, RoutesNames.writeMessage);
                   },

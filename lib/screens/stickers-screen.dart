@@ -6,7 +6,6 @@ import 'package:whatsapps_status_saver/classes/constants.dart';
 import 'package:whatsapps_status_saver/classes/helpers.dart';
 import 'package:whatsapps_status_saver/widgets/grid-bodered-image.dart';
 import 'package:whatsapps_status_saver/widgets/grid-image.dart';
-import 'package:whatsapps_status_saver/widgets/grid-view.dart';
 import 'package:whatsapps_status_saver/widgets/placeholder.dart';
 import 'package:whatsapps_status_saver/widgets/spinner.dart';
 
@@ -31,13 +30,12 @@ class _StickersScreenState extends State<StickersScreen> {
   void _saveSticker(String path) async {
     await Helper.copyFile(path, stickersSavePath);
     _hydrateState();
+    XBuilder.showSnackBar("Sticker saved!", context);
   }
 
   void _hydrateState() async {
     stickers = await Helper.getFilesOfType(stickerPath, 'webp');
     savedStickers = await Helper.getFilesOfType(stickersSavePath, 'webp');
-
-    XBuilder.showSnackBar("Status downloaded!", context);
 
     loading = false;
     setState(() {});
@@ -92,7 +90,7 @@ class _StickersScreenState extends State<StickersScreen> {
           children: [
             loading
                 ? const Spinner()
-                : GridViewCustom(
+                : XBuilder.buildGrid(
                     builder: (context, index) {
                       return GridBorderedImage(
                         source: stickers[index].path,
@@ -106,7 +104,7 @@ class _StickersScreenState extends State<StickersScreen> {
             savedStickers.isEmpty
                 ? const XPlaceholder(
                     text: "You have not yet saved any sticker!")
-                : GridViewCustom(
+                : XBuilder.buildGrid(
                     builder: (context, index) {
                       return GridImage(
                         source: savedStickers[index].path,

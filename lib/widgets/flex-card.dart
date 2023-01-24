@@ -4,6 +4,7 @@ class FlexCard extends StatelessWidget {
   Color color;
   IconData icon;
   String text;
+  String description;
   var onTap;
 
   FlexCard({
@@ -11,6 +12,7 @@ class FlexCard extends StatelessWidget {
     required this.color,
     required this.icon,
     required this.text,
+    required this.description,
     required this.onTap,
   });
 
@@ -44,8 +46,19 @@ class FlexCard extends StatelessWidget {
                   ),
                 ),
                 Text(
+                  description,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
                   text,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0),
                 )
               ],
             ),

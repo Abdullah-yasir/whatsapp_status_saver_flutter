@@ -8,4 +8,5 @@ class RoutesNames {
   static String writeMessage = '/write/message';
   static String galleryView = '/gallery/view';
   static String videoPlayer = '/video/play';
+  static String splitVideo = '/video/split';
 }
