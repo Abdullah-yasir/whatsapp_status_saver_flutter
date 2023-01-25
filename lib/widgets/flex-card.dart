@@ -25,7 +25,7 @@ class FlexCard extends StatelessWidget {
           margin: const EdgeInsets.all(15.0),
           padding: const EdgeInsets.all(15.0),
           decoration: BoxDecoration(
-            color: Color(0x8c16521e),
+            color: const Color(0x8c16521e),
             borderRadius: BorderRadius.circular(10.0),
             // border: Border.all(color: Colors.green, width: 5),
           ),

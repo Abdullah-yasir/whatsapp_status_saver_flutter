@@ -145,7 +145,9 @@ class _SaveStatusScreenState extends State<SaveStatusScreen> {
         ),
         body: TabBarView(children: [
           loading
-              ? Spinner()
+              ? const Spinner(
+                  text: "Getting WhatsApp Statuses...",
+                )
               : XBuilder.buildGrid(
                   builder: (context, index) {
                     return GestureDetector(
@@ -156,7 +158,7 @@ class _SaveStatusScreenState extends State<SaveStatusScreen> {
                   itemsCount: photos.length,
                 ),
           loading
-              ? Spinner()
+              ? const Spinner(text: "Getting Video Statuses...")
               : XBuilder.buildGrid(
                   builder: (context, index) {
                     return GestureDetector(
@@ -167,7 +169,7 @@ class _SaveStatusScreenState extends State<SaveStatusScreen> {
                   itemsCount: statusVideos.length,
                 ),
           loading
-              ? Spinner()
+              ? const Spinner(text: "Loading Saved Statuses...")
               : XBuilder.buildGrid(
                   builder: (context, index) {
                     return GestureDetector(
