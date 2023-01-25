@@ -89,7 +89,7 @@ class _StickersScreenState extends State<StickersScreen> {
         body: TabBarView(
           children: [
             loading
-                ? const Spinner()
+                ? Spinner()
                 : XBuilder.buildGrid(
                     builder: (context, index) {
                       return GridBorderedImage(
