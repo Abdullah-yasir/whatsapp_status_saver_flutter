@@ -32,6 +32,7 @@ flutter:
 
   assets:
     - assets/app-bg.webp
+    - assets/white-background.webp
 
 flutter_native_splash:
   color: "#ffffff"

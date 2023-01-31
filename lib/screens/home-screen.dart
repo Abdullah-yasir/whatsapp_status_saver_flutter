@@ -30,9 +30,13 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Container(
         height: double.infinity,
         width: double.infinity,
+        padding: const EdgeInsets.all(10),
         decoration: const BoxDecoration(
           image: DecorationImage(
-              fit: BoxFit.fill, image: AssetImage("assets/app-bg.webp")),
+            colorFilter: ColorFilter.linearToSrgbGamma(),
+            fit: BoxFit.cover,
+            image: AssetImage("assets/white-background.webp"),
+          ),
         ),
         child: const HomeCards(),
       ),

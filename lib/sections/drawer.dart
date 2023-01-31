@@ -62,7 +62,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               },
             ),
             title: const Text("Auto save status"),
-            subtitle: const Text("Seen status of the user"),
+            subtitle: const Text("Automatically save all seen statuses"),
             onTap: () {},
           ),
           ListTile(
@@ -72,7 +72,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               color: _iconColor,
             ),
             title: const Text("Privacy Policy"),
-            subtitle: const Text("Our Terms & Conditions"),
+            subtitle: const Text("How do we handle your data"),
             onTap: () {},
           ),
         ],

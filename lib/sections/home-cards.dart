@@ -30,20 +30,7 @@ class _HomeCardsState extends State<HomeCards> {
             child: Row(
               children: [
                 FlexCard(
-                  color: Colors.green,
-                  icon: Icons.download,
-                  text: 'Save',
-                  description: 'Save the seen status images and videos',
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      RoutesNames.saveStatus,
-                      arguments:
-                          ScreenArgs(dirPath: '', filePath: '', activeTab: 0),
-                    );
-                  },
-                ),
-                FlexCard(
+                  placeholder: true,
                   color: Colors.green,
                   icon: Icons.image,
                   text: 'Gallery',
@@ -51,23 +38,9 @@ class _HomeCardsState extends State<HomeCards> {
                   onTap: () {
                     Navigator.pushNamed(context, RoutesNames.gallery);
                   },
-                )
-              ],
-            ),
-          ),
-          Expanded(
-            child: Row(
-              children: [
-                FlexCard(
-                  color: Colors.green,
-                  icon: Icons.sticky_note_2,
-                  text: 'Stickers',
-                  description: "Save you favorite stickers",
-                  onTap: () {
-                    Navigator.pushNamed(context, RoutesNames.stickers);
-                  },
                 ),
                 FlexCard(
+                  placeholder: true,
                   color: Colors.green,
                   icon: Icons.video_file_rounded,
                   text: 'Video',
@@ -84,6 +57,36 @@ class _HomeCardsState extends State<HomeCards> {
               children: [
                 FlexCard(
                   color: Colors.green,
+                  icon: Icons.download,
+                  text: 'Status',
+                  description: 'Save the seen status images and videos',
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      RoutesNames.saveStatus,
+                      arguments:
+                          ScreenArgs(dirPath: '', filePath: '', activeTab: 0),
+                    );
+                  },
+                ),
+                FlexCard(
+                  color: Colors.green,
+                  icon: Icons.sticky_note_2,
+                  text: 'Stickers',
+                  description: "Save you favorite stickers",
+                  onTap: () {
+                    Navigator.pushNamed(context, RoutesNames.stickers);
+                  },
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                FlexCard(
+                  placeholder: true,
+                  color: Colors.green,
                   icon: Icons.circle_outlined,
                   text: 'Status',
                   description: "Write status with formatting",
@@ -92,6 +95,7 @@ class _HomeCardsState extends State<HomeCards> {
                   },
                 ),
                 FlexCard(
+                  placeholder: true,
                   color: Colors.green,
                   icon: Icons.message,
                   text: 'Message',
