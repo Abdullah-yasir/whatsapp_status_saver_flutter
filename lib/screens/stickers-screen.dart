@@ -5,9 +5,7 @@ import 'package:whatsapps_status_saver/classes/builder.dart';
 import 'package:whatsapps_status_saver/classes/constants.dart';
 import 'package:whatsapps_status_saver/classes/helpers.dart';
 import 'package:whatsapps_status_saver/widgets/grid-bodered-image.dart';
-import 'package:whatsapps_status_saver/widgets/grid-image.dart';
 import 'package:whatsapps_status_saver/widgets/placeholder.dart';
-import 'package:whatsapps_status_saver/widgets/spinner.dart';
 
 class StickersScreen extends StatefulWidget {
   const StickersScreen({super.key});
@@ -32,6 +30,8 @@ class _StickersScreenState extends State<StickersScreen> {
     savedStickers.add(file);
 
     setState(() {});
+
+    // ignore: use_build_context_synchronously
     XBuilder.showSnackBar("Sticker saved!", context);
   }
 
@@ -96,15 +96,23 @@ class _StickersScreenState extends State<StickersScreen> {
               stickers.isEmpty,
             )(
               child: XBuilder.buildGrid(
+                itemsCount: stickers.length,
                 builder: (context, index) {
-                  return GridBorderedImage(
-                    source: stickers[index].path,
+                  bool isDownloaded = Helper.listContains(
+                    savedStickers.map((e) => e.path).toList(),
+                    stickers[index].path.split(Platform.pathSeparator).last,
+                  );
+
+                  return GestureDetector(
                     onTap: () {
-                      _saveSticker(stickers[index].path);
+                      if (!isDownloaded) {
+                        _saveSticker(stickers[index].path);
+                      }
                     },
+                    child: XBuilder.buildPhotoItem(stickers[index].path,
+                        showBorder: isDownloaded),
                   );
                 },
-                itemsCount: stickers.length,
               ),
               loadingText: "Getting stickers...",
               emptyText: "No stickers found!",
@@ -114,7 +122,7 @@ class _StickersScreenState extends State<StickersScreen> {
                     text: "You have not yet saved any sticker!")
                 : XBuilder.buildGrid(
                     builder: (context, index) {
-                      return GridImage(
+                      return GridBorderedImage(
                         source: savedStickers[index].path,
                         onTap: () {},
                       );

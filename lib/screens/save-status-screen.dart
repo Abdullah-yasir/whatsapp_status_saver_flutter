@@ -7,8 +7,6 @@ import 'package:whatsapps_status_saver/classes/file-formats.dart';
 import 'package:whatsapps_status_saver/classes/helpers.dart';
 import 'package:whatsapps_status_saver/classes/routes.dart';
 import 'package:whatsapps_status_saver/classes/screen-args.dart';
-import 'package:whatsapps_status_saver/widgets/install-wa-message.dart';
-import 'package:whatsapps_status_saver/widgets/spinner.dart';
 
 class SaveStatusScreen extends StatefulWidget {
   const SaveStatusScreen({super.key});
@@ -35,42 +33,41 @@ class _SaveStatusScreenState extends State<SaveStatusScreen> {
     // copying file to the save location
     File copiedFile = await Helper.copyFile(filePath, appDirectories[0].path);
 
+    // if the file is a video, generate its thumbnail
     if (copiedFile.path.endsWith(Ext.video)) {
       savedVideoThumbMap[copiedFile.path] =
           await Helper.getVideoThumb(copiedFile);
     }
 
-    // loading saved images in state
-    List<String> images = Helper.getPathsOfFiles(
-        await Helper.getFilesOfType(appDirectories[0].path, Ext.image));
-
-    // loading saved videos in state
-    List<String> videos = Helper.getPathsOfFiles(
-        await Helper.getFilesOfType(appDirectories[0].path, Ext.video));
-
-    images.addAll(videos);
-
     setState(() {
-      saved = images;
+      saved.add(copiedFile.path);
     });
 
+    // ignore: use_build_context_synchronously
     XBuilder.showSnackBar("Status downloaded!", context);
   }
 
   Widget _buildSavedItem(String path) {
     if (path.endsWith(Ext.video) && savedVideoThumbMap.containsKey(path)) {
-      return XBuilder.buildVideoItem(savedVideoThumbMap[path] as String);
+      return XBuilder.buildPhotoItem(
+        savedVideoThumbMap[path] as String,
+        centerIcon: const Icon(
+          Icons.play_circle_filled_rounded,
+          color: Colors.green,
+        ),
+      );
     }
 
     return XBuilder.buildPhotoItem(path);
   }
 
-  void _onTapGridItem(String filePath) {
+  void _onTapGridItem(String filePath) async {
     String routeName = RoutesNames.galleryView;
 
     if (filePath.endsWith(Ext.video)) routeName = RoutesNames.videoPlayer;
 
-    Navigator.pushNamed(
+    // if user deletes any file, we get uri of it
+    var deletedFile = await Navigator.pushNamed(
       context,
       routeName,
       arguments: ScreenArgs(
@@ -78,6 +75,12 @@ class _SaveStatusScreenState extends State<SaveStatusScreen> {
         filePath: filePath,
       ),
     );
+
+    if (deletedFile != null) {
+      setState(() {
+        saved.remove(deletedFile);
+      });
+    }
   }
 
   @override
@@ -96,22 +99,28 @@ class _SaveStatusScreenState extends State<SaveStatusScreen> {
 
       // check if whatsApp dir exists
       if (Directory(Constants.statusFolder).existsSync()) {
+        // read photos for FS
         photos = Helper.getPathsOfFiles(
             await Helper.getFilesOfType(Constants.statusFolder, Ext.image));
 
+        // read items from save dir
         saved = Helper.getPathsOfFiles(
             await Helper.getFilesOfType(appDirectories[0].path, Ext.image));
 
+        // read videos from WA FS
         statusVideos = Helper.getPathsOfFiles(
             await Helper.getFilesOfType(Constants.statusFolder, Ext.video));
 
+        // get thumbs of all videos
         statusVideosThumbs = await Helper.getVideoThumbsPathList(statusVideos);
 
+        // read saved videos from app's FS
         List<String> savedVideos = Helper.getPathsOfFiles(
             await Helper.getFilesOfType(appDirectories[0].path, Ext.video));
 
         saved.addAll(savedVideos);
 
+        // get thumbs of saved videos
         for (String video in savedVideos) {
           savedVideoThumbMap[video] = await Helper.getVideoThumb(File(video));
         }
@@ -154,41 +163,84 @@ class _SaveStatusScreenState extends State<SaveStatusScreen> {
           children: [
             XBuilder.getPresenter(showInstallWhatsApp, loading, photos.isEmpty)(
                 child: XBuilder.buildGrid(
+                  itemsCount: photos.length,
                   builder: (context, index) {
+                    bool isDownloaded = Helper.listContains(
+                      saved,
+                      photos[index].split(Platform.pathSeparator).last,
+                    );
                     return GestureDetector(
-                      child: XBuilder.buildPhotoItem(photos[index]),
-                      onTap: () => _downloadStatus(photos[index]),
+                      child: XBuilder.buildPhotoItem(
+                        photos[index],
+                        showBorder: isDownloaded,
+                      ),
+                      onTap: () {
+                        if (!isDownloaded) {
+                          _downloadStatus(photos[index]);
+                        } else {
+                          Navigator.pushNamed(
+                            context,
+                            RoutesNames.galleryView,
+                            arguments: ScreenArgs(
+                              dirPath: appDirectories[0].path,
+                              filePath: photos[index],
+                            ),
+                          );
+                        }
+                      },
                     );
                   },
-                  itemsCount: photos.length,
                 ),
                 loadingText: "Getting WhatsApp Statuses...",
                 emptyText: "No Status found"),
             XBuilder.getPresenter(
                     showInstallWhatsApp, loading, statusVideos.isEmpty)(
                 child: XBuilder.buildGrid(
+                  itemsCount: statusVideos.length,
                   builder: (context, index) {
+                    bool isDownloaded = Helper.listContains(
+                      saved,
+                      statusVideos[index].split(Platform.pathSeparator).last,
+                    );
                     return GestureDetector(
-                      child: XBuilder.buildVideoItem(statusVideosThumbs[index]),
-                      onTap: () => _downloadStatus(statusVideos[index]),
+                      child: XBuilder.buildPhotoItem(statusVideosThumbs[index],
+                          showBorder: isDownloaded,
+                          centerIcon: const Icon(
+                            Icons.play_circle_filled_rounded,
+                            color: Colors.blue,
+                          )),
+                      onTap: () {
+                        if (!isDownloaded) {
+                          _downloadStatus(statusVideos[index]);
+                        } else {
+                          // open video
+                          Navigator.pushNamed(
+                            context,
+                            RoutesNames.videoPlayer,
+                            arguments: ScreenArgs(
+                              dirPath: appDirectories[0].path,
+                              filePath: statusVideos[index],
+                            ),
+                          );
+                        }
+                      },
                     );
                   },
-                  itemsCount: statusVideos.length,
                 ),
                 loadingText: "Getting Video Statuses...",
                 emptyText: "No video found!"),
             XBuilder.getPresenter(showInstallWhatsApp, loading, saved.isEmpty)(
                 child: XBuilder.buildGrid(
+                  itemsCount: saved.length,
                   builder: (context, index) {
                     return GestureDetector(
                       child: _buildSavedItem(saved[index]),
                       onTap: () => _onTapGridItem(saved[index]),
                     );
                   },
-                  itemsCount: saved.length,
                 ),
                 loadingText: "Loading Saved Statuses...",
-                emptyText: "You "),
+                emptyText: "You haven't saved any status yet!"),
           ],
         ),
       ),
