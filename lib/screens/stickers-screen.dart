@@ -17,28 +17,22 @@ class StickersScreen extends StatefulWidget {
 }
 
 class _StickersScreenState extends State<StickersScreen> {
+  bool showInstallWhatsApp = false;
+  bool loading = true;
+
   List<FileSystemEntity> stickers = [];
   List<FileSystemEntity> savedStickers = [];
   List<Directory> appDirectories = [];
 
   String stickerPath = Constants.stickersFolder;
-
   late String stickersSavePath;
 
-  bool loading = true;
-
   void _saveSticker(String path) async {
-    await Helper.copyFile(path, stickersSavePath);
-    _hydrateState();
-    XBuilder.showSnackBar("Sticker saved!", context);
-  }
+    File file = await Helper.copyFile(path, stickersSavePath);
+    savedStickers.add(file);
 
-  void _hydrateState() async {
-    stickers = await Helper.getFilesOfType(stickerPath, 'webp');
-    savedStickers = await Helper.getFilesOfType(stickersSavePath, 'webp');
-
-    loading = false;
     setState(() {});
+    XBuilder.showSnackBar("Sticker saved!", context);
   }
 
   @override
@@ -46,22 +40,30 @@ class _StickersScreenState extends State<StickersScreen> {
     (() async {
       appDirectories = await Helper.getAppDirectories();
 
-      String savePath = [
-        appDirectories[0].parent.path,
-        Platform.pathSeparator,
-        'stickers'
-      ].join();
+      if (Directory(Constants.statusFolder).existsSync()) {
+        String savePath = [
+          appDirectories[0].parent.path,
+          Platform.pathSeparator,
+          'stickers'
+        ].join();
 
-      Directory savedStickersDir = Directory(savePath);
+        Directory savedStickersDir = Directory(savePath);
 
-      // create dir for saving stickers if not exist
-      if (!(await savedStickersDir.exists())) {
-        await savedStickersDir.create();
+        // create dir for saving stickers if not exist
+        if (!(await savedStickersDir.exists())) {
+          await savedStickersDir.create();
+        }
+
+        stickersSavePath = savedStickersDir.path;
+
+        stickers = await Helper.getFilesOfType(stickerPath, 'webp');
+        savedStickers = await Helper.getFilesOfType(stickersSavePath, 'webp');
+
+        setState(() {});
+      } else {
+        showInstallWhatsApp = true;
       }
-
-      stickersSavePath = savedStickersDir.path;
-
-      _hydrateState();
+      loading = false;
     })();
     super.initState();
   }
@@ -88,19 +90,25 @@ class _StickersScreenState extends State<StickersScreen> {
         ),
         body: TabBarView(
           children: [
-            loading
-                ? Spinner()
-                : XBuilder.buildGrid(
-                    builder: (context, index) {
-                      return GridBorderedImage(
-                        source: stickers[index].path,
-                        onTap: () {
-                          _saveSticker(stickers[index].path);
-                        },
-                      );
+            XBuilder.getPresenter(
+              showInstallWhatsApp,
+              loading,
+              stickers.isEmpty,
+            )(
+              child: XBuilder.buildGrid(
+                builder: (context, index) {
+                  return GridBorderedImage(
+                    source: stickers[index].path,
+                    onTap: () {
+                      _saveSticker(stickers[index].path);
                     },
-                    itemsCount: stickers.length,
-                  ),
+                  );
+                },
+                itemsCount: stickers.length,
+              ),
+              loadingText: "Getting stickers...",
+              emptyText: "No stickers found!",
+            ),
             savedStickers.isEmpty
                 ? const XPlaceholder(
                     text: "You have not yet saved any sticker!")

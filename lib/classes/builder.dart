@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:whatsapps_status_saver/widgets/install-wa-message.dart';
+import 'package:whatsapps_status_saver/widgets/spinner.dart';
 
 class XBuilder {
   static Widget buildGrid({builder, itemsCount}) {
@@ -55,4 +57,19 @@ class XBuilder {
       ),
     );
   }
+
+  static getPresenter(bool showInstallWhatsApp, bool loading, bool isEmpty) =>
+      ({
+        required Widget child,
+        String loadingText = "loading...",
+        String emptyText = "Nothing found!",
+      }) {
+        if (showInstallWhatsApp) return const WAInstallMessage();
+
+        if (loading) return Spinner(text: loadingText);
+
+        if (isEmpty) return Center(child: Text(emptyText));
+
+        return child;
+      };
 }

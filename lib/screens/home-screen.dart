@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:whatsapps_status_saver/classes/constants.dart';
 import 'package:whatsapps_status_saver/sections/drawer.dart';
 import 'package:whatsapps_status_saver/sections/home-cards.dart';
 
@@ -20,6 +22,11 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         actions: [
           GestureDetector(
+            onTap: () {
+              Share.share(
+                  "*Whats Status & Sticker Saver*\nElevate your social media game with the ultimate WhatsApp status downloader!\nSay goodbye to screenshotting and hello to seamless saving.\n\nDownload our app now and never miss a beat of your friends' WhatsApp status updates:\n${Constants.playStoreUrl}\n\n#WhatsAppStatus #SneakPeek #NeverMissABeat",
+                  subject: "Install Whats Status & Sticker Saver");
+            },
             child: const Padding(
               padding: EdgeInsets.only(right: 20),
               child: Icon(Icons.share),

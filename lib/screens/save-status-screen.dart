@@ -7,6 +7,7 @@ import 'package:whatsapps_status_saver/classes/file-formats.dart';
 import 'package:whatsapps_status_saver/classes/helpers.dart';
 import 'package:whatsapps_status_saver/classes/routes.dart';
 import 'package:whatsapps_status_saver/classes/screen-args.dart';
+import 'package:whatsapps_status_saver/widgets/install-wa-message.dart';
 import 'package:whatsapps_status_saver/widgets/spinner.dart';
 
 class SaveStatusScreen extends StatefulWidget {
@@ -19,7 +20,7 @@ class SaveStatusScreen extends StatefulWidget {
 class _SaveStatusScreenState extends State<SaveStatusScreen> {
   int activeTab = 0;
   bool loading = true;
-  String whatsappStatusDir = Constants.statusFolder;
+  bool showInstallWhatsApp = false;
 
   late List<Directory> appDirectories;
 
@@ -92,24 +93,30 @@ class _SaveStatusScreenState extends State<SaveStatusScreen> {
   void initState() {
     (() async {
       appDirectories = await Helper.getAppDirectories();
-      photos = Helper.getPathsOfFiles(
-          await Helper.getFilesOfType(whatsappStatusDir, Ext.image));
 
-      saved = Helper.getPathsOfFiles(
-          await Helper.getFilesOfType(appDirectories[0].path, Ext.image));
+      // check if whatsApp dir exists
+      if (Directory(Constants.statusFolder).existsSync()) {
+        photos = Helper.getPathsOfFiles(
+            await Helper.getFilesOfType(Constants.statusFolder, Ext.image));
 
-      statusVideos = Helper.getPathsOfFiles(
-          await Helper.getFilesOfType(whatsappStatusDir, Ext.video));
+        saved = Helper.getPathsOfFiles(
+            await Helper.getFilesOfType(appDirectories[0].path, Ext.image));
 
-      statusVideosThumbs = await Helper.getVideoThumbsPathList(statusVideos);
+        statusVideos = Helper.getPathsOfFiles(
+            await Helper.getFilesOfType(Constants.statusFolder, Ext.video));
 
-      List<String> savedVideos = Helper.getPathsOfFiles(
-          await Helper.getFilesOfType(appDirectories[0].path, Ext.video));
+        statusVideosThumbs = await Helper.getVideoThumbsPathList(statusVideos);
 
-      saved.addAll(savedVideos);
+        List<String> savedVideos = Helper.getPathsOfFiles(
+            await Helper.getFilesOfType(appDirectories[0].path, Ext.video));
 
-      for (String video in savedVideos) {
-        savedVideoThumbMap[video] = await Helper.getVideoThumb(File(video));
+        saved.addAll(savedVideos);
+
+        for (String video in savedVideos) {
+          savedVideoThumbMap[video] = await Helper.getVideoThumb(File(video));
+        }
+      } else {
+        showInstallWhatsApp = true;
       }
 
       loading = false;
@@ -143,12 +150,10 @@ class _SaveStatusScreenState extends State<SaveStatusScreen> {
             ],
           ),
         ),
-        body: TabBarView(children: [
-          loading
-              ? const Spinner(
-                  text: "Getting WhatsApp Statuses...",
-                )
-              : XBuilder.buildGrid(
+        body: TabBarView(
+          children: [
+            XBuilder.getPresenter(showInstallWhatsApp, loading, photos.isEmpty)(
+                child: XBuilder.buildGrid(
                   builder: (context, index) {
                     return GestureDetector(
                       child: XBuilder.buildPhotoItem(photos[index]),
@@ -157,9 +162,11 @@ class _SaveStatusScreenState extends State<SaveStatusScreen> {
                   },
                   itemsCount: photos.length,
                 ),
-          loading
-              ? const Spinner(text: "Getting Video Statuses...")
-              : XBuilder.buildGrid(
+                loadingText: "Getting WhatsApp Statuses...",
+                emptyText: "No Status found"),
+            XBuilder.getPresenter(
+                    showInstallWhatsApp, loading, statusVideos.isEmpty)(
+                child: XBuilder.buildGrid(
                   builder: (context, index) {
                     return GestureDetector(
                       child: XBuilder.buildVideoItem(statusVideosThumbs[index]),
@@ -168,9 +175,10 @@ class _SaveStatusScreenState extends State<SaveStatusScreen> {
                   },
                   itemsCount: statusVideos.length,
                 ),
-          loading
-              ? const Spinner(text: "Loading Saved Statuses...")
-              : XBuilder.buildGrid(
+                loadingText: "Getting Video Statuses...",
+                emptyText: "No video found!"),
+            XBuilder.getPresenter(showInstallWhatsApp, loading, saved.isEmpty)(
+                child: XBuilder.buildGrid(
                   builder: (context, index) {
                     return GestureDetector(
                       child: _buildSavedItem(saved[index]),
@@ -179,7 +187,10 @@ class _SaveStatusScreenState extends State<SaveStatusScreen> {
                   },
                   itemsCount: saved.length,
                 ),
-        ]),
+                loadingText: "Loading Saved Statuses...",
+                emptyText: "You "),
+          ],
+        ),
       ),
     );
   }
