@@ -66,4 +66,8 @@ class Helper {
   static List<String> getPathsOfFiles(List<FileSystemEntity> entities) {
     return entities.map((e) => e.path).toList();
   }
+
+  static bool listContains(List<String> list, String item) {
+    return list.any((element) => element.endsWith(item));
+  }
 }
