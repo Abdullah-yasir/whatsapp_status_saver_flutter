@@ -22,14 +22,14 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         RoutesNames.home: (context) => const MyHomePage(title: 'Whats Status'),
-        RoutesNames.saveStatus: (context) => const SaveStatusScreen(),
+        RoutesNames.quotes: (context) => const ComingSoonScreen(),
         RoutesNames.gallery: (context) => const ComingSoonScreen(),
         RoutesNames.stickers: (context) => const StickersScreen(),
-        RoutesNames.quotes: (context) => const ComingSoonScreen(),
+        RoutesNames.saveStatus: (context) => const SaveStatusScreen(),
         RoutesNames.writeStatus: (context) => const ComingSoonScreen(),
-        RoutesNames.writeMessage: (context) => const ComingSoonScreen(),
+        RoutesNames.videoPlayer: (context) => const VideoPlayerScreen(),
         RoutesNames.galleryView: (context) => const GalleryView(),
-        RoutesNames.videoPlayer: (context) => const VideoPlayerScreen()
+        RoutesNames.writeMessage: (context) => const ComingSoonScreen(),
       },
     );
   }
