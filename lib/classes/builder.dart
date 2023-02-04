@@ -20,28 +20,56 @@ class XBuilder {
     );
   }
 
-  static Widget buildPhotoItem(String path) {
-    return FittedBox(
-      fit: BoxFit.cover,
-      clipBehavior: Clip.hardEdge,
-      child: Image.file(
-        File(path),
-      ),
-    );
-  }
+  static Widget buildPhotoItem(String path,
+      {bool showBorder = false, Icon? centerIcon}) {
+    BoxDecoration dec = const BoxDecoration();
+    Widget downloadIcon = Container();
 
-  static Widget buildVideoItem(String path) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-            image: Image.file(File(path)).image, fit: BoxFit.cover),
-      ),
-      child: const Center(
-        child: Icon(
-          Icons.play_circle_filled_rounded,
-          color: Colors.green,
+    if (showBorder) {
+      dec = BoxDecoration(
+        border: Border.all(color: Colors.blue, width: 1),
+      );
+      downloadIcon = Positioned(
+        right: 0,
+        bottom: 0,
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.blue,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10.0),
+            ),
+          ),
+          width: 25,
+          height: 25,
+          child: const Icon(
+            Icons.download_done,
+            color: Colors.white,
+            size: 18,
+          ),
         ),
-      ),
+      );
+    }
+
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: Container(
+            decoration: dec,
+            child: FittedBox(
+              fit: BoxFit.cover,
+              clipBehavior: Clip.hardEdge,
+              child: Image.file(
+                File(path),
+              ),
+            ),
+          ),
+        ),
+        downloadIcon,
+        Positioned.fill(
+            child: Center(
+          child: centerIcon,
+        ))
+      ],
     );
   }
 
