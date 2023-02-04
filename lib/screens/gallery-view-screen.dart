@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:whatsapps_status_saver/classes/routes.dart';
 import 'package:whatsapps_status_saver/classes/screen-args.dart';
 
@@ -23,19 +24,24 @@ class _GalleryViewState extends State<GalleryView> {
           GestureDetector(
             child: const Padding(
               padding: EdgeInsets.only(right: 20),
-              child: Icon(Icons.delete),
+              child: Icon(Icons.share),
             ),
-            onTap: () {
-              File(args.filePath).delete().then(
-                    (value) => Navigator.pushNamed(
-                      context,
-                      RoutesNames.saveStatus,
-                      arguments:
-                          ScreenArgs(dirPath: '', filePath: '', activeTab: 2),
-                    ),
-                  );
+            onTap: () async {
+              Share.shareXFiles([XFile(args.filePath)]);
             },
-          )
+          ),
+          PopupMenuButton(
+            itemBuilder: (context) => [
+              PopupMenuItem(child: const Text('Copy'), onTap: () {}),
+              PopupMenuItem(
+                  child: const Text('Delete'),
+                  onTap: () async {
+                    await File(args.filePath).delete();
+                    // ignore: use_build_context_synchronously
+                    Navigator.pop(context, args.filePath);
+                  }),
+            ],
+          ),
         ],
       ),
       body: PhotoView(
